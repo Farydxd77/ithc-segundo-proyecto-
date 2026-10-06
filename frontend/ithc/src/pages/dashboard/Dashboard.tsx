@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import { useAuth } from "../../auth/context/AuthContext";
 
 export const Dashboard = () => {
@@ -9,6 +10,7 @@ export const Dashboard = () => {
       <p>Bienvenido, {user?.name}</p>
       <p>{user?.email}</p>
 
+      <Link to="/crear-anuncio">Crear anuncio</Link>
       <button onClick={logout}>Cerrar sesión</button>
     </div>
   );

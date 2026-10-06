@@ -40,3 +40,12 @@ button {
   color: red;
   margin: 0;
 }
+
+textarea {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: inherit;
+  min-height: 80px;
+  resize: vertical;
+}
