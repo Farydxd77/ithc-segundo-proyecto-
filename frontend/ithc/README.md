@@ -1,32 +1,38 @@
-# React + TypeScript + Vite
+# Voluntariado Cerca
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Aplicación para publicar y gestionar convocatorias de voluntariado.
 
-Currently, two official plugins are available:
+## Cómo ejecutar el proyecto
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+cd frontend/ithc
+npm install
+npm run dev
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## Nueva funcionalidad: Cerrar convocatoria
+
+Cada anuncio se crea con la convocatoria **abierta**. En el Dashboard aparece la lista de anuncios
+y el botón **Cerrar convocatoria**, que cambia el estado a **cerrada**. El cambio se guarda en
+`localStorage`, por eso se conserva después de recargar la página.
+
+La regla de cambio de estado está en `src/domain/convocatoria.ts`.
+
+## Pruebas unitarias
+
+Las pruebas están en `src/domain/convocatoria.test.ts` y usan Vitest.
+
+Comando para ejecutar las pruebas:
+
+```bash
+cd frontend/ithc
+npm install
+npm test
+```
+
+Pruebas incluidas:
+
+1. El estado inicial es abierta.
+2. Cerrar convocatoria cambia el estado de abierta a cerrada.
+3. No se puede cerrar una convocatoria que ya está cerrada.
+4. Los demás datos del anuncio se conservan.

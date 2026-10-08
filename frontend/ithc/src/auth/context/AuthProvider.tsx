@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       }
 
       try {
-        const userLogged = await meRequest(token);
+        const userLogged = await meRequest();
         setUser(userLogged);
         setStatus("authenticated");
       } catch {
@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const logout = async () => {
     const token = localStorage.getItem("token");
-    if (token) await logoutRequest(token).catch(() => {});
+    if (token) await logoutRequest().catch(() => {});
 
     localStorage.removeItem("token");
     setUser(null);

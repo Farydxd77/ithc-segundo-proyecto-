@@ -5,7 +5,7 @@ body {
 }
 
 .card {
-  max-width: 360px;
+  max-width: 480px;
   margin: 60px auto;
   padding: 24px;
   background: white;
@@ -48,4 +48,74 @@ textarea {
   font-family: inherit;
   min-height: 80px;
   resize: vertical;
+}
+
+.anuncio {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.anuncio p {
+  margin: 0;
+}
+
+.detalle {
+  color: #666;
+  font-size: 13px;
+}
+
+.estado {
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 10px;
+  color: white;
+  background: #2e9e4f;
+}
+
+.estado.cerrada {
+  background: #888;
+}
+
+.acciones {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.aviso {
+  color: #9a6700;
+  background: #fff8e1;
+  padding: 6px;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.ok {
+  color: #2e9e4f;
+}
+
+button:disabled {
+  background: #bbb;
+  cursor: not-allowed;
+}
+
+button.secundario {
+  background: #666;
+}
+
+button.peligro {
+  background: #d33;
+}
+
+.confirmar {
+  background: #fdecec;
+  padding: 8px;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }

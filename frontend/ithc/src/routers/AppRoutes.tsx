@@ -8,8 +8,9 @@ import { HomePage } from "../pages/home/HomePage"
 import { Dashboard } from "../pages/dashboard/Dashboard"
 import { ForgotPasswordPage } from "../auth/pages/recuperarPassword/ForgotPasswordPage"
 import { ResetPasswordPage } from "../auth/pages/recuperarPassword/ResetPasswordPage"
-import { CrearAnuncioPage } from "../pages/anuncios/CrearAnuncioPage"
-import { AnuncioPublicadoPage } from "../pages/anuncios/AnuncioPublicadoPage"
+import { CrearAnuncioPage } from "../anuncios/pages/CrearAnuncioPage"
+import { AnuncioPublicadoPage } from "../anuncios/pages/AnuncioPublicadoPage"
+import { EditarAnuncioPage } from "../anuncios/pages/EditarAnuncioPage"
 
 export const AppRoutes = () => {
   return (
@@ -34,6 +35,7 @@ export const AppRoutes = () => {
           <Route path="/dashboard" element={<Dashboard/>}/>
           <Route path="/crear-anuncio" element={<CrearAnuncioPage/>}/>
           <Route path="/anuncio-publicado" element={<AnuncioPublicadoPage/>}/>
+          <Route path="/editar-anuncio/:id" element={<EditarAnuncioPage/>}/>
 
         </Route>
 
