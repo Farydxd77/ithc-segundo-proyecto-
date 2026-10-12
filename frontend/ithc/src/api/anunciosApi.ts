@@ -12,4 +12,6 @@ export const eliminarAnuncioRequest = (id: number) => request("DELETE", `/anunci
 
 export const cerrarConvocatoriaRequest = (id: number) => request<Anuncio>("POST", `/anuncios/${id}/cerrar`);
 
+export const reabrirConvocatoriaRequest = (id: number) => request<Anuncio>("POST", `/anuncios/${id}/reabrir`);
+
 export const inscribirseRequest = (id: number) => request<Anuncio>("POST", `/anuncios/${id}/inscribirse`);

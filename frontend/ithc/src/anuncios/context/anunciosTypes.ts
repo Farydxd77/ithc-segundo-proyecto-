@@ -10,5 +10,6 @@ export interface AnunciosContextType {
   editar: (id: number, datos: AnuncioDatos) => Promise<void>;
   eliminar: (id: number) => Promise<void>;
   cerrar: (id: number) => Promise<void>;
+  reabrir: (id: number) => Promise<void>;
   inscribirse: (id: number) => Promise<void>;
 }

@@ -10,12 +10,12 @@ interface AnuncioCardProps {
 
 export const AnuncioCard = ({ anuncio }: AnuncioCardProps) => {
   const { user } = useAuth();
-  const { eliminar, cerrar, inscribirse } = useAnuncios();
+  const { eliminar, cerrar, reabrir, inscribirse } = useAnuncios();
   const [confirmando, setConfirmando] = useState(false);
   const [error, setError] = useState("");
 
   const esMio = esCreador(anuncio, user?.id);
-  const bloqueo = motivoBloqueoInscripcion(anuncio);
+  const bloqueo = motivoBloqueoInscripcion(anuncio, user?.id);
 
   const ejecutar = async (accion: () => Promise<void>) => {
     setError("");
@@ -40,23 +40,44 @@ export const AnuncioCard = ({ anuncio }: AnuncioCardProps) => {
       </p>
 
       {/* Inscripción: si está bloqueada se explica el motivo */}
-      {anuncio.inscrito && <p className="ok">✓ Estás inscrito</p>}
-      {bloqueo && !anuncio.inscrito ? (
-        <>
-          <button disabled>Inscribirme</button>
-          <p className="aviso">{bloqueo}</p>
-        </>
+      {anuncio.inscrito ? (
+        <p className="ok">✓ Estás inscrito</p>
       ) : (
-        !anuncio.inscrito && <button onClick={() => ejecutar(() => inscribirse(anuncio.id))}>Inscribirme</button>
+        <>
+          <button disabled={!!bloqueo} onClick={() => ejecutar(() => inscribirse(anuncio.id))}>
+            Inscribirme
+          </button>
+          {bloqueo && <p className="aviso">{bloqueo}</p>}
+        </>
+      )}
+
+      {/* El creador ve la lista de postulados */}
+      {esMio && (
+        <div className="postulados">
+          <p className="detalle">Postulados:</p>
+          {anuncio.postulados.length === 0 ? (
+            <p className="detalle">Nadie se ha postulado todavía.</p>
+          ) : (
+            <ul>
+              {anuncio.postulados.map((p) => (
+                <li key={p.id}>{p.nombre}</li>
+              ))}
+            </ul>
+          )}
+        </div>
       )}
 
       {/* Acciones del creador */}
       {esMio && !confirmando && (
         <div className="acciones">
           <Link to={`/editar-anuncio/${anuncio.id}`}>Editar</Link>
-          {anuncio.estado === "abierta" && (
+          {anuncio.estado === "abierta" ? (
             <button className="secundario" onClick={() => ejecutar(() => cerrar(anuncio.id))}>
               Cerrar convocatoria
+            </button>
+          ) : (
+            <button className="secundario" onClick={() => ejecutar(() => reabrir(anuncio.id))}>
+              Reabrir convocatoria
             </button>
           )}
           <button className="peligro" onClick={() => setConfirmando(true)}>

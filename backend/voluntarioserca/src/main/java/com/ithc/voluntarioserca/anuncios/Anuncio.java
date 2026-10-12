@@ -56,30 +56,6 @@ public class Anuncio {
     @JoinTable(name = "inscripciones")
     private Set<User> voluntarios = new HashSet<>();
 
-    // Regla de estado: solo se puede cerrar una convocatoria abierta
-    public void cerrar() {
-        if (estado == Estado.cerrada) {
-            throw new IllegalStateException("La convocatoria ya está cerrada");
-        }
-        estado = Estado.cerrada;
-    }
-
-    // Restricción principal: una convocatoria cerrada no acepta inscripciones
-    public void inscribir(User voluntario) {
-        if (estado == Estado.cerrada) {
-            throw new IllegalStateException("La convocatoria está cerrada y ya no acepta inscripciones");
-        }
-        if (voluntarios.contains(voluntario)) {
-            throw new IllegalStateException("Ya estás inscrito en esta convocatoria");
-        }
-        if (voluntarios.size() >= cupos) {
-            throw new IllegalStateException("No quedan cupos disponibles");
-        }
-        voluntarios.add(voluntario);
-    }
-
-    public boolean estaInscrito(User user) { return voluntarios.contains(user); }
-
     public Long getId() { return id; }
 
     public String getTitulo() { return titulo; }
@@ -101,6 +77,7 @@ public class Anuncio {
     public void setCupos(int cupos) { this.cupos = cupos; }
 
     public Estado getEstado() { return estado; }
+    public void setEstado(Estado estado) { this.estado = estado; }
 
     public User getCreador() { return creador; }
     public void setCreador(User creador) { this.creador = creador; }

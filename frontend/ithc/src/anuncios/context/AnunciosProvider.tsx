@@ -9,6 +9,7 @@ import {
   eliminarAnuncioRequest,
   inscribirseRequest,
   listarAnunciosRequest,
+  reabrirConvocatoriaRequest,
 } from "../../api/anunciosApi";
 
 interface AnunciosProviderProps {
@@ -39,7 +40,7 @@ export const AnunciosProvider = ({ children }: AnunciosProviderProps) => {
   }, [isAuthenticated, recargar]);
 
   // Reemplaza en la lista el anuncio que devolvió el backend
-  const actualizar = (anuncio: Anuncio) => setAnuncios((lista) => lista.map((a) => (a.id === anuncio.id ? anuncio : a)));
+  const actualizar = (anuncio: Anuncio) => setAnuncios((lista) => lista.map((a) => ( (a.id === anuncio.id) ? anuncio : a)));
 
   const crear = async (datos: AnuncioDatos) => {
     const nuevo = await crearAnuncioRequest(datos);
@@ -55,10 +56,12 @@ export const AnunciosProvider = ({ children }: AnunciosProviderProps) => {
 
   const cerrar = async (id: number) => actualizar(await cerrarConvocatoriaRequest(id));
 
+  const reabrir = async (id: number) => actualizar(await reabrirConvocatoriaRequest(id));
+
   const inscribirse = async (id: number) => actualizar(await inscribirseRequest(id));
 
   return (
-    <AnunciosContext.Provider value={{ anuncios: isAuthenticated ? anuncios : [], cargando, error, recargar, crear, editar, eliminar, cerrar, inscribirse }}>
+    <AnunciosContext.Provider value={{ anuncios: isAuthenticated ? anuncios : [], cargando, error, recargar, crear, editar, eliminar, cerrar, reabrir, inscribirse }}>
       {children}
     </AnunciosContext.Provider>
   );
