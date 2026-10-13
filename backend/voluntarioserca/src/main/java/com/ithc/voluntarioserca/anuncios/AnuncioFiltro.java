@@ -1,5 +1,6 @@
 package com.ithc.voluntarioserca.anuncios;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -39,9 +40,10 @@ public record AnuncioFiltro(String q, Anuncio.Causa causa, Anuncio.Modalidad mod
             if (tieneTexto(hasta)) {
                 condiciones.add(cb.lessThanOrEqualTo(root.get("fecha"), hasta.trim()));
             }
-            // Disponibles: abiertas y con al menos un cupo libre
+            // Disponibles: misma regla que la inscripción (abierta, fecha no vencida y con al menos un cupo libre)
             if (disponibles) {
                 condiciones.add(cb.equal(root.get("estado"), Anuncio.Estado.abierta));
+                condiciones.add(cb.greaterThanOrEqualTo(root.get("fecha"), LocalDate.now().toString()));
                 condiciones.add(cb.lessThan(cb.size(root.<Set<User>>get("voluntarios")), root.<Integer>get("cupos")));
             }
             return cb.and(condiciones.toArray(new Predicate[0]));

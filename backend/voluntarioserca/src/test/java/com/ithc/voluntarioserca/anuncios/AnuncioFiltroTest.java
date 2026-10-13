@@ -96,6 +96,16 @@ class AnuncioFiltroTest {
     }
 
     @Test
+    void disponiblesExcluyeConvocatoriasConFechaVencida() {
+        guardar("Feria pasada", "Río Vivo", Causa.comunidad, Modalidad.presencial, "Santa Cruz", "2000-01-01", 10);
+        em.flush();
+
+        // Está abierta y con cupos, pero ya nadie podría postularse
+        assertEquals(List.of("Clases de lectura", "Limpieza del río"),
+                titulos(new AnuncioFiltro(null, null, null, null, null, null, true)));
+    }
+
+    @Test
     void filtraPorRangoDeFechasYUbicacion() {
         assertEquals(List.of("Campaña de vacunación", "Clases de lectura"),
                 titulos(new AnuncioFiltro(null, null, null, null, "2099-01-01", "2099-01-15", false)));
