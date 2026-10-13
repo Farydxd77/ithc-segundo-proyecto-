@@ -1,13 +1,13 @@
 import { useState } from "react";
-import type { AnuncioDatos } from "../../domain/convocatoria";
+import { CAUSAS, MODALIDADES, type Anuncio, type AnuncioDatos, type Causa, type Modalidad } from "../../domain/convocatoria";
 
 interface AnuncioFormProps {
-  inicial?: AnuncioDatos;
+  inicial?: AnuncioDatos | Anuncio;
   textoBoton: string;
   onGuardar: (datos: AnuncioDatos) => Promise<void>;
 }
 
-const vacio = { titulo: "", organizacion: "", descripcion: "", fecha: "", lugar: "", cupos: "" };
+const vacio = { titulo: "", organizacion: "", descripcion: "", fecha: "", lugar: "", cupos: "", causa: "", modalidad: "" };
 
 // Formulario compartido entre crear y editar anuncio
 export const AnuncioForm = ({ inicial, textoBoton, onGuardar }: AnuncioFormProps) => {
@@ -20,13 +20,15 @@ export const AnuncioForm = ({ inicial, textoBoton, onGuardar }: AnuncioFormProps
           fecha: inicial.fecha,
           lugar: inicial.lugar,
           cupos: String(inicial.cupos),
+          causa: inicial.causa ?? "",
+          modalidad: inicial.modalidad ?? "",
         }
       : vacio,
   );
   const [error, setError] = useState("");
   const [guardando, setGuardando] = useState(false);
 
-  const cambiar = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+  const cambiar = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -35,7 +37,12 @@ export const AnuncioForm = ({ inicial, textoBoton, onGuardar }: AnuncioFormProps
 
     setGuardando(true);
     try {
-      await onGuardar({ ...form, cupos: Number(form.cupos) });
+      await onGuardar({
+        ...form,
+        cupos: Number(form.cupos),
+        causa: form.causa as Causa,
+        modalidad: form.modalidad as Modalidad,
+      });
     } catch (err) {
       setError((err as Error).message);
       setGuardando(false);
@@ -47,6 +54,18 @@ export const AnuncioForm = ({ inicial, textoBoton, onGuardar }: AnuncioFormProps
       <input name="titulo" placeholder="Título" value={form.titulo} onChange={cambiar} />
       <input name="organizacion" placeholder="Organización" value={form.organizacion} onChange={cambiar} />
       <textarea name="descripcion" placeholder="Descripción" value={form.descripcion} onChange={cambiar} />
+      <select name="causa" aria-label="Causa" value={form.causa} onChange={cambiar}>
+        <option value="">Causa</option>
+        {Object.entries(CAUSAS).map(([valor, texto]) => (
+          <option key={valor} value={valor}>{texto}</option>
+        ))}
+      </select>
+      <select name="modalidad" aria-label="Modalidad" value={form.modalidad} onChange={cambiar}>
+        <option value="">Modalidad</option>
+        {Object.entries(MODALIDADES).map(([valor, texto]) => (
+          <option key={valor} value={valor}>{texto}</option>
+        ))}
+      </select>
       <input name="fecha" type="date" value={form.fecha} onChange={cambiar} />
       <input name="lugar" placeholder="Lugar" value={form.lugar} onChange={cambiar} />
       <input name="cupos" type="number" min={1} placeholder="Cupos" value={form.cupos} onChange={cambiar} />

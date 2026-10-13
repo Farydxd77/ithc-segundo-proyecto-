@@ -119,3 +119,65 @@ button.peligro {
   flex-direction: column;
   gap: 6px;
 }
+
+select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: white;
+  font-family: inherit;
+}
+
+.filtros {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+  background: #f7f9fc;
+  border-radius: 6px;
+}
+
+.filtros-fila {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.filtros-fila > * {
+  flex: 1 1 120px;
+}
+
+.filtros label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 4px 2px 10px;
+  border-radius: 12px;
+  background: #e3edfb;
+  color: #1f5fb4;
+  font-size: 13px;
+}
+
+.chip button {
+  padding: 0 6px;
+  background: transparent;
+  color: inherit;
+}
+
+.aviso p {
+  margin: 0 0 6px;
+}

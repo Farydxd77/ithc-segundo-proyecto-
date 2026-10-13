@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router";
 import { useAuth } from "../../auth/context/AuthContext";
 import { useAnuncios } from "../context/AnunciosContext";
-import { esCreador, motivoBloqueoInscripcion, type Anuncio } from "../../domain/convocatoria";
+import { CAUSAS, MODALIDADES, esCreador, motivoBloqueoInscripcion, type Anuncio } from "../../domain/convocatoria";
 
 interface AnuncioCardProps {
   anuncio: Anuncio;
@@ -35,6 +35,13 @@ export const AnuncioCard = ({ anuncio }: AnuncioCardProps) => {
       <p className="detalle">
         {anuncio.organizacion} · {anuncio.lugar} · {anuncio.fecha}
       </p>
+      {(anuncio.causa || anuncio.modalidad) && (
+        <p className="detalle">
+          {[anuncio.causa && CAUSAS[anuncio.causa], anuncio.modalidad && MODALIDADES[anuncio.modalidad]]
+            .filter(Boolean)
+            .join(" · ")}
+        </p>
+      )}
       <p className="detalle">
         {anuncio.inscritos}/{anuncio.cupos} voluntarios inscritos · publicado por {anuncio.creadorNombre}
       </p>

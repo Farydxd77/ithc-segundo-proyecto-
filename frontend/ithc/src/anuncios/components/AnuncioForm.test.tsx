@@ -28,6 +28,8 @@ describe("AnuncioForm", () => {
     llenar("Lugar", "Parque central");
     llenar("Cupos", "20");
     fireEvent.change(container.querySelector('input[name="fecha"]')!, { target: { value: "2026-10-10" } });
+    fireEvent.change(screen.getByLabelText("Causa"), { target: { value: "medio_ambiente" } });
+    fireEvent.change(screen.getByLabelText("Modalidad"), { target: { value: "presencial" } });
 
     fireEvent.click(screen.getByText("Publicar"));
 
@@ -39,6 +41,8 @@ describe("AnuncioForm", () => {
         fecha: "2026-10-10",
         lugar: "Parque central",
         cupos: 20,
+        causa: "medio_ambiente",
+        modalidad: "presencial",
       }),
     );
   });
@@ -46,7 +50,7 @@ describe("AnuncioForm", () => {
   it("muestra el error que devuelve el backend", async () => {
     const onGuardar = vi.fn().mockRejectedValue(new Error("No autorizado"));
     const inicial = {
-      titulo: "A", organizacion: "B", descripcion: "C", fecha: "2026-10-10", lugar: "D", cupos: 5,
+      titulo: "A", organizacion: "B", descripcion: "C", fecha: "2026-10-10", lugar: "D", cupos: 5, causa: "salud" as const, modalidad: "virtual" as const,
     };
     render(<AnuncioForm inicial={inicial} textoBoton="Guardar cambios" onGuardar={onGuardar} />);
 

@@ -1,7 +1,9 @@
 import type { Anuncio, AnuncioDatos } from "../domain/convocatoria";
+import { aQueryString, SIN_FILTROS, type Filtros } from "../domain/filtros";
 import { request } from "./http";
 
-export const listarAnunciosRequest = () => request<Anuncio[]>("GET", "/anuncios");
+export const listarAnunciosRequest = (filtros: Filtros = SIN_FILTROS) =>
+  request<Anuncio[]>("GET", `/anuncios${aQueryString(filtros)}`);
 
 export const crearAnuncioRequest = (datos: AnuncioDatos) => request<Anuncio>("POST", "/anuncios", datos);
 

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ithc.voluntarioserca.auth.User;
@@ -28,7 +29,7 @@ public class AnuncioController {
 
     record Postulado(Long id, String nombre) {}
     record AnuncioResponse(Long id, String titulo, String organizacion, String descripcion, String fecha, String lugar,
-            int cupos, String estado, Long creadorId, String creadorNombre, int inscritos, boolean inscrito,
+            int cupos, String causa, String modalidad, String estado, Long creadorId, String creadorNombre, int inscritos, boolean inscrito,
             List<Postulado> postulados) {}
 
     private final AnuncioService anuncioService;
@@ -39,10 +40,19 @@ public class AnuncioController {
         this.userRepository = userRepository;
     }
 
+    // Todos los filtros son opcionales: los que no vienen no se aplican
     @GetMapping
-    public ResponseEntity<?> listar(@RequestHeader(value = "Authorization", required = false) String header) {
+    public ResponseEntity<?> listar(@RequestHeader(value = "Authorization", required = false) String header,
+            @RequestParam(required = false) String q,
+            @RequestParam(required = false) Anuncio.Causa causa,
+            @RequestParam(required = false) Anuncio.Modalidad modalidad,
+            @RequestParam(required = false) String lugar,
+            @RequestParam(required = false) String desde,
+            @RequestParam(required = false) String hasta,
+            @RequestParam(defaultValue = "false") boolean disponibles) {
         User user = usuarioDeSesion(header);
-        List<AnuncioResponse> anuncios = anuncioService.listar().stream()
+        AnuncioFiltro filtro = new AnuncioFiltro(q, causa, modalidad, lugar, desde, hasta, disponibles);
+        List<AnuncioResponse> anuncios = anuncioService.listar(filtro).stream()
                 .map(a -> toResponse(a, user))
                 .toList();
         return ResponseEntity.ok(anuncios);
@@ -109,8 +119,13 @@ public class AnuncioController {
 
     private AnuncioResponse toResponse(Anuncio a, User user) {
         return new AnuncioResponse(a.getId(), a.getTitulo(), a.getOrganizacion(), a.getDescripcion(), a.getFecha(),
-                a.getLugar(), a.getCupos(), a.getEstado().name(), a.getCreador().getId(), a.getCreador().getName(),
+                a.getLugar(), a.getCupos(), nombre(a.getCausa()), nombre(a.getModalidad()), a.getEstado().name(), a.getCreador().getId(), a.getCreador().getName(),
                 a.getVoluntarios().size(), anuncioService.estaInscrito(a, user), postulados(a, user));
+    }
+
+    // Los anuncios creados antes de agregar causa y modalidad las tienen en null
+    private String nombre(Enum<?> valor) {
+        return valor == null ? null : valor.name();
     }
 
     // Solo el creador ve quiénes se postularon

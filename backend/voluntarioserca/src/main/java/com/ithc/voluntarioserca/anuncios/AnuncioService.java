@@ -3,6 +3,7 @@ package com.ithc.voluntarioserca.anuncios;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,9 +19,10 @@ public class AnuncioService {
         this.anuncioRepository = anuncioRepository;
     }
 
+    // La búsqueda y los filtros se resuelven en la consulta a la base de datos
     @Transactional(readOnly = true)
-    public List<Anuncio> listar() {
-        return anuncioRepository.findAllByOrderByIdDesc();
+    public List<Anuncio> listar(AnuncioFiltro filtro) {
+        return anuncioRepository.findAll(filtro.toSpecification(), Sort.by(Sort.Direction.DESC, "id"));
     }
 
     public Anuncio crear(User user, AnuncioRequest req) {
@@ -109,7 +111,8 @@ public class AnuncioService {
 
     private void validar(AnuncioRequest req) {
         if (isEmpty(req.titulo()) || isEmpty(req.organizacion()) || isEmpty(req.descripcion())
-                || isEmpty(req.fecha()) || isEmpty(req.lugar()) || req.cupos() == null) {
+                || isEmpty(req.fecha()) || isEmpty(req.lugar()) || req.cupos() == null
+                || req.causa() == null || req.modalidad() == null) {
             throw new AnuncioException(400, "Completa todos los campos");
         }
         if (req.cupos() < 1) {
@@ -124,6 +127,8 @@ public class AnuncioService {
         anuncio.setFecha(req.fecha().trim());
         anuncio.setLugar(req.lugar().trim());
         anuncio.setCupos(req.cupos());
+        anuncio.setCausa(req.causa());
+        anuncio.setModalidad(req.modalidad());
     }
 
     private boolean isEmpty(String value) {

@@ -1,4 +1,19 @@
 export type Estado = "abierta" | "cerrada";
+export type Causa = "medio_ambiente" | "educacion" | "salud" | "animales" | "comunidad";
+export type Modalidad = "presencial" | "virtual";
+
+export const CAUSAS: Record<Causa, string> = {
+  medio_ambiente: "Medio ambiente",
+  educacion: "Educación",
+  salud: "Salud",
+  animales: "Animales",
+  comunidad: "Comunidad",
+};
+
+export const MODALIDADES: Record<Modalidad, string> = {
+  presencial: "Presencial",
+  virtual: "Virtual",
+};
 
 export interface AnuncioDatos {
   titulo: string;
@@ -7,9 +22,14 @@ export interface AnuncioDatos {
   fecha: string;
   lugar: string;
   cupos: number;
+  causa: Causa;
+  modalidad: Modalidad;
 }
 
-export interface Anuncio extends AnuncioDatos {
+// Los anuncios creados antes de agregar causa y modalidad las tienen en null
+export interface Anuncio extends Omit<AnuncioDatos, "causa" | "modalidad"> {
+  causa: Causa | null;
+  modalidad: Modalidad | null;
   id: number;
   estado: Estado;
   creadorId: number;
@@ -27,7 +47,7 @@ export interface Postulado {
 export const esCreador = (anuncio: Anuncio, userId?: number) => anuncio.creadorId === userId;
 
 // Fecha local en formato YYYY-MM-DD, el mismo que guarda el anuncio
-const fechaLocal = (fecha: Date) =>
+export const fechaLocal = (fecha: Date) =>
   `${fecha.getFullYear()}-${String(fecha.getMonth() + 1).padStart(2, "0")}-${String(fecha.getDate()).padStart(2, "0")}`;
 
 // Mismas reglas que el backend: devuelve el motivo por el que no se puede postular, o null si sí se puede.

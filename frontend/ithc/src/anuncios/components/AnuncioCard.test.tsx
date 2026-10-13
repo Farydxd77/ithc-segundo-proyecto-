@@ -30,6 +30,8 @@ const anuncio: Anuncio = {
   fecha: "2099-01-01",
   lugar: "Parque central",
   cupos: 20,
+  causa: "medio_ambiente",
+  modalidad: "presencial",
   estado: "abierta",
   creadorId: 7,
   creadorNombre: "Ana",

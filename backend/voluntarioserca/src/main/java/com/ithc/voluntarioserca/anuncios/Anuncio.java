@@ -22,6 +22,8 @@ import jakarta.persistence.Table;
 public class Anuncio {
 
     public enum Estado { abierta, cerrada }
+    public enum Causa { medio_ambiente, educacion, salud, animales, comunidad }
+    public enum Modalidad { presencial, virtual }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,6 +46,13 @@ public class Anuncio {
 
     @Column(nullable = false)
     private int cupos;
+
+    // Nullable en la tabla para no romper anuncios creados antes; el service los exige al crear/editar
+    @Enumerated(EnumType.STRING)
+    private Causa causa;
+
+    @Enumerated(EnumType.STRING)
+    private Modalidad modalidad;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -75,6 +84,12 @@ public class Anuncio {
 
     public int getCupos() { return cupos; }
     public void setCupos(int cupos) { this.cupos = cupos; }
+
+    public Causa getCausa() { return causa; }
+    public void setCausa(Causa causa) { this.causa = causa; }
+
+    public Modalidad getModalidad() { return modalidad; }
+    public void setModalidad(Modalidad modalidad) { this.modalidad = modalidad; }
 
     public Estado getEstado() { return estado; }
     public void setEstado(Estado estado) { this.estado = estado; }
