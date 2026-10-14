@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -25,6 +26,7 @@ import com.ithc.voluntarioserca.auth.UserRepository;
 @RestController
 @RequestMapping("/api/anuncios")
 @CrossOrigin(originPatterns = "${app.frontend-url}")
+@Transactional
 public class AnuncioController {
 
     record Postulado(Long id, String nombre) {}
@@ -42,6 +44,7 @@ public class AnuncioController {
 
     // Todos los filtros son opcionales: los que no vienen no se aplican
     @GetMapping
+    @Transactional(readOnly = true)
     public ResponseEntity<?> listar(@RequestHeader(value = "Authorization", required = false) String header,
             @RequestParam(required = false) String q,
             @RequestParam(required = false) Anuncio.Causa causa,
@@ -101,6 +104,13 @@ public class AnuncioController {
         return ResponseEntity.ok(toResponse(anuncioService.inscribirse(user, id), user));
     }
 
+    @DeleteMapping("/{id}/inscribirse")
+    public ResponseEntity<?> cancelarPostulacion(@RequestHeader(value = "Authorization", required = false) String header,
+            @PathVariable Long id) {
+        User user = usuarioDeSesion(header);
+        return ResponseEntity.ok(toResponse(anuncioService.cancelarPostulacion(user, id), user));
+    }
+
     @ExceptionHandler(AnuncioException.class)
     public ResponseEntity<?> manejarError(AnuncioException e) {
         return ResponseEntity.status(e.getStatus()).body(Map.of("message", e.getMessage()));
@@ -118,9 +128,15 @@ public class AnuncioController {
     }
 
     private AnuncioResponse toResponse(Anuncio a, User user) {
+        User creador = a.getCreador();
+        Long creadorId = creador != null ? creador.getId() : null;
+        String creadorNombre = creador != null ? creador.getName() : null;
+        int inscritos = a.getVoluntarios() == null ? 0 : a.getVoluntarios().size();
+        boolean inscrito = user != null && anuncioService.estaInscrito(a, user);
+
         return new AnuncioResponse(a.getId(), a.getTitulo(), a.getOrganizacion(), a.getDescripcion(), a.getFecha(),
-                a.getLugar(), a.getCupos(), nombre(a.getCausa()), nombre(a.getModalidad()), a.getEstado().name(), a.getCreador().getId(), a.getCreador().getName(),
-                a.getVoluntarios().size(), anuncioService.estaInscrito(a, user), postulados(a, user));
+                a.getLugar(), a.getCupos(), nombre(a.getCausa()), nombre(a.getModalidad()), a.getEstado().name(),
+                creadorId, creadorNombre, inscritos, inscrito, postulados(a, user));
     }
 
     // Los anuncios creados antes de agregar causa y modalidad las tienen en null
@@ -130,7 +146,7 @@ public class AnuncioController {
 
     // Solo el creador ve quiénes se postularon
     private List<Postulado> postulados(Anuncio a, User user) {
-        if (!a.getCreador().getId().equals(user.getId())) {
+        if (user == null || a.getCreador() == null || !a.getCreador().getId().equals(user.getId())) {
             return List.of();
         }
         return a.getVoluntarios().stream()

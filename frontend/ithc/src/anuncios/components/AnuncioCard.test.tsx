@@ -6,6 +6,7 @@ import type { Anuncio } from "../../domain/convocatoria";
 
 const cerrar = vi.fn();
 const reabrir = vi.fn();
+const cancelarPostulacion = vi.fn();
 
 // El usuario con sesión iniciada es el creador del anuncio (id 7)
 vi.mock("../../auth/context/AuthContext", () => ({
@@ -13,7 +14,7 @@ vi.mock("../../auth/context/AuthContext", () => ({
 }));
 
 vi.mock("../context/AnunciosContext", () => ({
-  useAnuncios: () => ({ eliminar: vi.fn(), cerrar, reabrir, inscribirse: vi.fn() }),
+  useAnuncios: () => ({ eliminar: vi.fn(), cerrar, reabrir, inscribirse: vi.fn(), cancelarPostulacion }),
 }));
 
 afterEach(cleanup);
@@ -106,5 +107,13 @@ describe("Postulación", () => {
 
     expect((screen.getByText("Inscribirme") as HTMLButtonElement).disabled).toBe(false);
     expect(screen.queryByText("Postulados:")).toBeNull();
+  });
+
+  it("quien ya está inscrito puede cancelar su postulación", async () => {
+    mostrar({ ...anuncio, creadorId: 8, inscrito: true, inscritos: 1 });
+
+    fireEvent.click(screen.getByText("Cancelar postulación"));
+
+    await waitFor(() => expect(cancelarPostulacion).toHaveBeenCalledWith(1));
   });
 });

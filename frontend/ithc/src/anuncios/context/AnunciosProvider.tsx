@@ -3,6 +3,7 @@ import { AnunciosContext } from "./AnunciosContext";
 import { useAuth } from "../../auth/context/AuthContext";
 import type { Anuncio, AnuncioDatos } from "../../domain/convocatoria";
 import {
+  cancelarPostulacionRequest,
   cerrarConvocatoriaRequest,
   crearAnuncioRequest,
   editarAnuncioRequest,
@@ -69,8 +70,10 @@ export const AnunciosProvider = ({ children }: AnunciosProviderProps) => {
 
   const inscribirse = async (id: number) => actualizar(await inscribirseRequest(id));
 
+  const cancelarPostulacion = async (id: number) => actualizar(await cancelarPostulacionRequest(id));
+
   return (
-    <AnunciosContext.Provider value={{ anuncios: isAuthenticated ? anuncios : [], cargando, error, filtros, cambiarFiltros, limpiarFiltros, recargar, crear, editar, eliminar, cerrar, reabrir, inscribirse }}>
+    <AnunciosContext.Provider value={{ anuncios: isAuthenticated ? anuncios : [], cargando, error, filtros, cambiarFiltros, limpiarFiltros, recargar, crear, editar, eliminar, cerrar, reabrir, inscribirse, cancelarPostulacion }}>
       {children}
     </AnunciosContext.Provider>
   );

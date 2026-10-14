@@ -10,7 +10,7 @@ interface AnuncioCardProps {
 
 export const AnuncioCard = ({ anuncio }: AnuncioCardProps) => {
   const { user } = useAuth();
-  const { eliminar, cerrar, reabrir, inscribirse } = useAnuncios();
+  const { eliminar, cerrar, reabrir, inscribirse, cancelarPostulacion } = useAnuncios();
   const [confirmando, setConfirmando] = useState(false);
   const [error, setError] = useState("");
 
@@ -48,7 +48,12 @@ export const AnuncioCard = ({ anuncio }: AnuncioCardProps) => {
 
       {/* Inscripción: si está bloqueada se explica el motivo */}
       {anuncio.inscrito ? (
-        <p className="ok">✓ Estás inscrito</p>
+        <div className="acciones">
+          <p className="ok">✓ Estás inscrito</p>
+          <button className="secundario" onClick={() => ejecutar(() => cancelarPostulacion(anuncio.id))}>
+            Cancelar postulación
+          </button>
+        </div>
       ) : (
         <>
           <button disabled={!!bloqueo} onClick={() => ejecutar(() => inscribirse(anuncio.id))}>

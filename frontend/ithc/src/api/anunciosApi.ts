@@ -17,3 +17,5 @@ export const cerrarConvocatoriaRequest = (id: number) => request<Anuncio>("POST"
 export const reabrirConvocatoriaRequest = (id: number) => request<Anuncio>("POST", `/anuncios/${id}/reabrir`);
 
 export const inscribirseRequest = (id: number) => request<Anuncio>("POST", `/anuncios/${id}/inscribirse`);
+
+export const cancelarPostulacionRequest = (id: number) => request<Anuncio>("DELETE", `/anuncios/${id}/inscribirse`);

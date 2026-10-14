@@ -16,4 +16,5 @@ export interface AnunciosContextType {
   cerrar: (id: number) => Promise<void>;
   reabrir: (id: number) => Promise<void>;
   inscribirse: (id: number) => Promise<void>;
+  cancelarPostulacion: (id: number) => Promise<void>;
 }

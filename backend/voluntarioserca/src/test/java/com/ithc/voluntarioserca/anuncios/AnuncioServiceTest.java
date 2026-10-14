@@ -158,4 +158,26 @@ class AnuncioServiceTest {
 
         assertEquals(404, e.getStatus());
     }
+
+    @Test
+    void cancelarLaPostulacionLiberaElCupo() {
+        Anuncio anuncio = nuevoAnuncio(1);
+        User voluntario = usuario(2L);
+        service.inscribirse(voluntario, 10L);
+
+        service.cancelarPostulacion(voluntario, 10L);
+
+        assertEquals(0, anuncio.getVoluntarios().size());
+        service.inscribirse(usuario(3L), 10L);
+        assertEquals(1, anuncio.getVoluntarios().size());
+    }
+
+    @Test
+    void noSePuedeCancelarSiNoEstabaInscrito() {
+        nuevoAnuncio(5);
+
+        AnuncioException e = assertThrows(AnuncioException.class, () -> service.cancelarPostulacion(usuario(2L), 10L));
+
+        assertEquals("No estás inscrito en esta convocatoria", e.getMessage());
+    }
 }

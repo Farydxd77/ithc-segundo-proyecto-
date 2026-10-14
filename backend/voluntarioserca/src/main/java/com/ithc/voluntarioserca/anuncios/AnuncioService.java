@@ -75,7 +75,7 @@ public class AnuncioService {
     // Restricción principal: solo se acepta la postulación a una convocatoria abierta, con cupos y fecha vigente
     public Anuncio inscribirse(User user, Long id) {
         Anuncio anuncio = buscarParaModificar(id);
-        if (anuncio.getCreador().getId().equals(user.getId())) {
+        if (anuncio.getCreador() != null && anuncio.getCreador().getId().equals(user.getId())) {
             throw new AnuncioException(403, "No puedes postularte a tu propia convocatoria");
         }
         if (anuncio.getEstado() == Anuncio.Estado.cerrada) {
@@ -94,6 +94,19 @@ public class AnuncioService {
         return anuncio;
     }
 
+    // Control del usuario (H3): puede retirar su postulación mientras la actividad no se haya realizado
+    public Anuncio cancelarPostulacion(User user, Long id) {
+        Anuncio anuncio = buscarParaModificar(id);
+        if (!estaInscrito(anuncio, user)) {
+            throw new AnuncioException(409, "No estás inscrito en esta convocatoria");
+        }
+        if (LocalDate.parse(anuncio.getFecha()).isBefore(LocalDate.now())) {
+            throw new AnuncioException(409, "La actividad ya se realizó; no se puede cancelar la postulación");
+        }
+        anuncio.getVoluntarios().remove(user);
+        return anuncio;
+    }
+
     public boolean estaInscrito(Anuncio anuncio, User user) {
         return anuncio.getVoluntarios().contains(user);
     }
@@ -104,7 +117,7 @@ public class AnuncioService {
     }
 
     private void exigirCreador(Anuncio anuncio, User user, String accion) {
-        if (!anuncio.getCreador().getId().equals(user.getId())) {
+        if (user == null || anuncio.getCreador() == null || !anuncio.getCreador().getId().equals(user.getId())) {
             throw new AnuncioException(403, "Solo quien creó el anuncio puede " + accion);
         }
     }

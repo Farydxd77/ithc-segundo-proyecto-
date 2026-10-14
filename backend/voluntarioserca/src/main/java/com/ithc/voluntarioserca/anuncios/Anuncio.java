@@ -12,6 +12,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
@@ -58,7 +59,9 @@ public class Anuncio {
     @Column(nullable = false)
     private Estado estado = Estado.abierta;
 
+    // La columna se creó como autor_id; se mantiene ese nombre para no perder los anuncios existentes
     @ManyToOne(optional = false)
+    @JoinColumn(name = "autor_id")
     private User creador;
 
     @ManyToMany
