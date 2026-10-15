@@ -93,7 +93,7 @@ describe("Postulación", () => {
   it("al creador se le bloquea la postulación y se le explica el motivo", () => {
     mostrar(anuncio);
 
-    expect((screen.getByText("Inscribirme") as HTMLButtonElement).disabled).toBe(true);
+    expect((screen.getByText("Postularme") as HTMLButtonElement).disabled).toBe(true);
     expect(screen.getByText("No puedes postularte a tu propia convocatoria")).toBeTruthy();
   });
 
@@ -106,11 +106,11 @@ describe("Postulación", () => {
   it("quien no es el creador puede postularse y no ve la lista", () => {
     mostrar({ ...anuncio, creadorId: 8 });
 
-    expect((screen.getByText("Inscribirme") as HTMLButtonElement).disabled).toBe(false);
+    expect((screen.getByText("Postularme") as HTMLButtonElement).disabled).toBe(false);
     expect(screen.queryByText("Postulados:")).toBeNull();
   });
 
-  it("quien ya está inscrito puede cancelar su postulación", async () => {
+  it("quien ya se postuló puede cancelar su postulación", async () => {
     mostrar({ ...anuncio, creadorId: 8, inscrito: true, inscritos: 1 });
 
     fireEvent.click(screen.getByText("Cancelar postulación"));
@@ -122,7 +122,7 @@ describe("Postulación", () => {
     inscribirse.mockResolvedValue(undefined);
     mostrar({ ...anuncio, creadorId: 8 });
 
-    fireEvent.click(screen.getByText("Inscribirme"));
+    fireEvent.click(screen.getByText("Postularme"));
 
     expect(await screen.findByText("Postulación enviada. Ya apareces entre los postulados.")).toBeTruthy();
   });

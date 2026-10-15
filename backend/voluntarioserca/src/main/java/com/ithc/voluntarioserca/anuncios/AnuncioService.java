@@ -38,7 +38,7 @@ public class AnuncioService {
         exigirCreador(anuncio, user, "editarlo");
         validar(req);
         if (req.cupos() < anuncio.getVoluntarios().size()) {
-            throw new AnuncioException(400, "Los cupos no pueden ser menos que los voluntarios ya inscritos");
+            throw new AnuncioException(400, "Los cupos no pueden ser menos que los voluntarios ya postulados");
         }
         copiarDatos(req, anuncio);
         return anuncio;
@@ -79,10 +79,10 @@ public class AnuncioService {
             throw new AnuncioException(403, "No puedes postularte a tu propia convocatoria");
         }
         if (anuncio.getEstado() == Anuncio.Estado.cerrada) {
-            throw new AnuncioException(409, "La convocatoria está cerrada y ya no acepta inscripciones");
+            throw new AnuncioException(409, "La convocatoria está cerrada y ya no acepta postulaciones");
         }
         if (estaInscrito(anuncio, user)) {
-            throw new AnuncioException(409, "Ya estás inscrito en esta convocatoria");
+            throw new AnuncioException(409, "Ya te postulaste a esta convocatoria");
         }
         if (LocalDate.parse(anuncio.getFecha()).isBefore(LocalDate.now())) {
             throw new AnuncioException(409, "La fecha de la convocatoria ya pasó");
@@ -98,7 +98,7 @@ public class AnuncioService {
     public Anuncio cancelarPostulacion(User user, Long id) {
         Anuncio anuncio = buscarParaModificar(id);
         if (!estaInscrito(anuncio, user)) {
-            throw new AnuncioException(409, "No estás inscrito en esta convocatoria");
+            throw new AnuncioException(409, "No te postulaste a esta convocatoria");
         }
         if (LocalDate.parse(anuncio.getFecha()).isBefore(LocalDate.now())) {
             throw new AnuncioException(409, "La actividad ya se realizó; no se puede cancelar la postulación");

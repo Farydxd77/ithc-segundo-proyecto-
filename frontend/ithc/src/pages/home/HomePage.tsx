@@ -13,8 +13,8 @@ export const HomePage = () => {
         <Link to="/dashboard">Ir al dashboard</Link>
       ) : (
         <>
-          <Link to="/login">Login</Link>
-          <Link to="/register">Register</Link>
+          <Link to="/login">Iniciar sesión</Link>
+          <Link to="/register">Crear cuenta</Link>
         </>
       )}
     </div>

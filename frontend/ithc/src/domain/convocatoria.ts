@@ -77,8 +77,8 @@ export const fechaLegible = (fecha: string) => {
 // Mismas reglas que el backend: devuelve el motivo por el que no se puede postular, o null si sí se puede.
 export const motivoBloqueoInscripcion = (anuncio: Anuncio, userId?: number, hoy = new Date()): string | null => {
   if (esCreador(anuncio, userId)) return "No puedes postularte a tu propia convocatoria";
-  if (anuncio.estado === "cerrada") return "La convocatoria está cerrada y ya no acepta inscripciones";
-  if (anuncio.inscrito) return "Ya estás inscrito en esta convocatoria";
+  if (anuncio.estado === "cerrada") return "La convocatoria está cerrada y ya no acepta postulaciones";
+  if (anuncio.inscrito) return "Ya te postulaste a esta convocatoria";
   if (anuncio.fecha < fechaLocal(hoy)) return "La fecha de la convocatoria ya pasó";
   if (anuncio.inscritos >= anuncio.cupos) return "No quedan cupos disponibles";
   return null;

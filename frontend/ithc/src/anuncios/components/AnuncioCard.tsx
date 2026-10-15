@@ -57,13 +57,13 @@ export const AnuncioCard = ({ anuncio }: AnuncioCardProps) => {
         </p>
       )}
       <p className="detalle">
-        {anuncio.inscritos}/{anuncio.cupos} voluntarios inscritos · publicado por {anuncio.creadorNombre}
+        {anuncio.inscritos}/{anuncio.cupos} postulados · publicado por {anuncio.creadorNombre}
       </p>
 
       {/* Inscripción: si está bloqueada se explica el motivo */}
       {anuncio.inscrito ? (
         <div className="acciones">
-          <p className="ok">✓ Estás inscrito</p>
+          <p className="ok">✓ Estás postulado</p>
           <button
             className="secundario"
             onClick={() =>
@@ -81,7 +81,7 @@ export const AnuncioCard = ({ anuncio }: AnuncioCardProps) => {
               ejecutar(() => inscribirse(anuncio.id), "Postulación enviada. Ya apareces entre los postulados.")
             }
           >
-            Inscribirme
+            Postularme
           </button>
           {bloqueo && <p className="aviso">{bloqueo}</p>}
         </>

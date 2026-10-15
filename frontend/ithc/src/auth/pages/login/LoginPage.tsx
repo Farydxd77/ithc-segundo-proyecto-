@@ -42,7 +42,7 @@ export const LoginPage = () => {
 
         {error && <p className="error">{error}</p>}
 
-        <button type="submit">Login</button>
+        <button type="submit">Iniciar sesión</button>
       </form>
 
       <Link to="/forgot-password">¿Olvidaste tu contraseña?</Link>

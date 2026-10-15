@@ -19,14 +19,14 @@ const anuncio: Anuncio = {
   postulados: [],
 };
 
-describe("Inscripción a una convocatoria", () => {
-  it("una convocatoria abierta con cupos acepta inscripciones", () => {
+describe("Postulación a una convocatoria", () => {
+  it("una convocatoria abierta con cupos acepta postulaciones", () => {
     expect(motivoBloqueoInscripcion(anuncio)).toBeNull();
   });
 
-  it("una convocatoria cerrada no acepta inscripciones y explica el motivo", () => {
+  it("una convocatoria cerrada no acepta postulaciones y explica el motivo", () => {
     const cerrada: Anuncio = { ...anuncio, estado: "cerrada" };
-    expect(motivoBloqueoInscripcion(cerrada)).toBe("La convocatoria está cerrada y ya no acepta inscripciones");
+    expect(motivoBloqueoInscripcion(cerrada)).toBe("La convocatoria está cerrada y ya no acepta postulaciones");
   });
 
   it("una convocatoria reabierta vuelve a aceptar inscripciones", () => {
@@ -35,15 +35,15 @@ describe("Inscripción a una convocatoria", () => {
     expect(motivoBloqueoInscripcion(reabierta)).toBeNull();
   });
 
-  it("no se puede inscribir dos veces", () => {
-    expect(motivoBloqueoInscripcion({ ...anuncio, inscrito: true })).toBe("Ya estás inscrito en esta convocatoria");
+  it("no se puede postular dos veces", () => {
+    expect(motivoBloqueoInscripcion({ ...anuncio, inscrito: true })).toBe("Ya te postulaste a esta convocatoria");
   });
 
-  it("no se puede inscribir si no quedan cupos", () => {
+  it("no se puede postular si no quedan cupos", () => {
     expect(motivoBloqueoInscripcion({ ...anuncio, inscritos: 20 })).toBe("No quedan cupos disponibles");
   });
 
-  it("no se puede inscribir si la fecha ya pasó", () => {
+  it("no se puede postular si la fecha ya pasó", () => {
     const hoy = new Date(2026, 9, 10);
     expect(motivoBloqueoInscripcion({ ...anuncio, fecha: "2026-10-09" }, 8, hoy)).toBe(
       "La fecha de la convocatoria ya pasó",

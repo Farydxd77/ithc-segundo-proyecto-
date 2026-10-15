@@ -62,7 +62,7 @@ class AnuncioServiceTest {
         AnuncioException e = assertThrows(AnuncioException.class, () -> service.inscribirse(usuario(2L), 10L));
 
         assertEquals(409, e.getStatus());
-        assertEquals("La convocatoria está cerrada y ya no acepta inscripciones", e.getMessage());
+        assertEquals("La convocatoria está cerrada y ya no acepta postulaciones", e.getMessage());
         assertEquals(0, anuncio.getVoluntarios().size());
     }
 
@@ -74,7 +74,7 @@ class AnuncioServiceTest {
 
         AnuncioException e = assertThrows(AnuncioException.class, () -> service.inscribirse(voluntario, 10L));
 
-        assertEquals("Ya estás inscrito en esta convocatoria", e.getMessage());
+        assertEquals("Ya te postulaste a esta convocatoria", e.getMessage());
     }
 
     @Test
@@ -178,6 +178,6 @@ class AnuncioServiceTest {
 
         AnuncioException e = assertThrows(AnuncioException.class, () -> service.cancelarPostulacion(usuario(2L), 10L));
 
-        assertEquals("No estás inscrito en esta convocatoria", e.getMessage());
+        assertEquals("No te postulaste a esta convocatoria", e.getMessage());
     }
 }

@@ -59,7 +59,7 @@ export const RegisterPage = () => {
 
         {error && <p className="error">{error}</p>}
 
-        <button type="submit">Register</button>
+        <button type="submit">Crear cuenta</button>
       </form>
 
       <Link to="/login">¿Ya tienes cuenta? Inicia sesión</Link>
