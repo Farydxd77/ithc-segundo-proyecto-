@@ -60,8 +60,8 @@ export const AnuncioCard = ({ anuncio }: AnuncioCardProps) => {
         {anuncio.inscritos}/{anuncio.cupos} postulados · publicado por {anuncio.creadorNombre}
       </p>
 
-      {/* Inscripción: si está bloqueada se explica el motivo */}
-      {anuncio.inscrito ? (
+      {/* Postulación: si está bloqueada se explica el motivo. Al creador no se le muestra porque nunca puede postularse */}
+      {esMio ? null : anuncio.inscrito ? (
         <div className="acciones">
           <p className="ok">✓ Estás postulado</p>
           <button

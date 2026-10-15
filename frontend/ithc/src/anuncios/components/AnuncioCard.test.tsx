@@ -90,11 +90,12 @@ describe("Reabrir convocatoria", () => {
 });
 
 describe("Postulación", () => {
-  it("al creador se le bloquea la postulación y se le explica el motivo", () => {
+  it("al creador no se le muestra el botón de postularse ni el aviso", () => {
     mostrar(anuncio);
 
-    expect((screen.getByText("Postularme") as HTMLButtonElement).disabled).toBe(true);
-    expect(screen.getByText("No puedes postularte a tu propia convocatoria")).toBeTruthy();
+    expect(screen.queryByText("Postularme")).toBeNull();
+    expect(screen.queryByText("No puedes postularte a tu propia convocatoria")).toBeNull();
+    expect(screen.getByText("Cerrar convocatoria")).toBeTruthy();
   });
 
   it("el creador ve la lista de postulados", () => {
