@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { esCreador, estadoVisible, motivoBloqueoInscripcion, type Anuncio } from "./convocatoria";
+import { ESTADOS, esCreador, estadoVisible, fechaLegible, motivoBloqueoInscripcion, type Anuncio } from "./convocatoria";
 
 const anuncio: Anuncio = {
   id: 1,
@@ -69,6 +69,18 @@ describe("Estado que ve el usuario", () => {
 
   it("una convocatoria cerrada sigue cerrada aunque su fecha haya pasado", () => {
     expect(estadoVisible({ ...anuncio, estado: "cerrada", fecha: "2026-10-03" }, hoy)).toBe("cerrada");
+  });
+});
+
+describe("Fecha y estado en lenguaje del usuario", () => {
+  it("la fecha se muestra con el nombre del mes", () => {
+    expect(fechaLegible("2026-10-19")).toBe("19 de octubre de 2026");
+    expect(fechaLegible("2027-01-05")).toBe("5 de enero de 2027");
+  });
+
+  it("el estado se muestra con su nombre y no con el valor técnico", () => {
+    expect(ESTADOS.abierta).toBe("Abierta");
+    expect(ESTADOS.vencida).toBe("Vencida");
   });
 });
 

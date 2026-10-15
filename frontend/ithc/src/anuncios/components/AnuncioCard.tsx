@@ -4,8 +4,10 @@ import { useAuth } from "../../auth/context/AuthContext";
 import { useAnuncios } from "../context/AnunciosContext";
 import {
   CAUSAS,
+  ESTADOS,
   MODALIDADES,
   esCreador,
+  fechaLegible,
   estadoVisible,
   motivoBloqueoInscripcion,
   type Anuncio,
@@ -41,11 +43,11 @@ export const AnuncioCard = ({ anuncio }: AnuncioCardProps) => {
   return (
     <div className="anuncio">
       <p>
-        <strong>{anuncio.titulo}</strong> <span className={`estado ${estado}`}>{estado}</span>
+        <strong>{anuncio.titulo}</strong> <span className={`estado ${estado}`}>{ESTADOS[estado]}</span>
       </p>
       <p>{anuncio.descripcion}</p>
       <p className="detalle">
-        {anuncio.organizacion} · {anuncio.lugar} · {anuncio.fecha}
+        {anuncio.organizacion} · {anuncio.lugar} · {fechaLegible(anuncio.fecha)}
       </p>
       {(anuncio.causa || anuncio.modalidad) && (
         <p className="detalle">
