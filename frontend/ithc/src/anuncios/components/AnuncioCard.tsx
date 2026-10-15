@@ -19,7 +19,7 @@ interface AnuncioCardProps {
 
 export const AnuncioCard = ({ anuncio }: AnuncioCardProps) => {
   const { user } = useAuth();
-  const { eliminar, cerrar, reabrir, inscribirse, cancelarPostulacion } = useAnuncios();
+  const { eliminar, cerrar, reabrir, inscribirse, cancelarPostulacion, cambiarFiltros } = useAnuncios();
   const [confirmando, setConfirmando] = useState(false);
   const [error, setError] = useState("");
   const [mensaje, setMensaje] = useState("");
@@ -38,6 +38,12 @@ export const AnuncioCard = ({ anuncio }: AnuncioCardProps) => {
     } catch (err) {
       setError((err as Error).message);
     }
+  };
+
+  // Salida cuando no se puede postular: mostrar solo las convocatorias donde sí se puede
+  const verDisponibles = () => {
+    cambiarFiltros({ disponibles: true });
+    document.querySelector(".filtros")?.scrollIntoView?.({ behavior: "smooth" });
   };
 
   return (
@@ -83,7 +89,14 @@ export const AnuncioCard = ({ anuncio }: AnuncioCardProps) => {
           >
             Postularme
           </button>
-          {bloqueo && <p className="aviso">{bloqueo}</p>}
+          {bloqueo && (
+            <div className="aviso">
+              <p>{bloqueo}</p>
+              <button type="button" className="secundario" onClick={verDisponibles}>
+                Ver convocatorias disponibles
+              </button>
+            </div>
+          )}
         </>
       )}
       {mensaje && (

@@ -8,6 +8,7 @@ const cerrar = vi.fn();
 const reabrir = vi.fn();
 const cancelarPostulacion = vi.fn();
 const inscribirse = vi.fn();
+const cambiarFiltros = vi.fn();
 
 // El usuario con sesión iniciada es el creador del anuncio (id 7)
 vi.mock("../../auth/context/AuthContext", () => ({
@@ -15,7 +16,7 @@ vi.mock("../../auth/context/AuthContext", () => ({
 }));
 
 vi.mock("../context/AnunciosContext", () => ({
-  useAnuncios: () => ({ eliminar: vi.fn(), cerrar, reabrir, inscribirse, cancelarPostulacion }),
+  useAnuncios: () => ({ eliminar: vi.fn(), cerrar, reabrir, inscribirse, cancelarPostulacion, cambiarFiltros }),
 }));
 
 afterEach(cleanup);
@@ -117,6 +118,15 @@ describe("Postulación", () => {
     fireEvent.click(screen.getByText("Cancelar postulación"));
 
     await waitFor(() => expect(cancelarPostulacion).toHaveBeenCalledWith(1));
+  });
+
+  it("si no puede postularse ve el motivo y una salida a las convocatorias disponibles", () => {
+    mostrar({ ...anuncio, creadorId: 8, inscritos: 20 });
+
+    expect(screen.getByText("No quedan cupos disponibles")).toBeTruthy();
+    fireEvent.click(screen.getByText("Ver convocatorias disponibles"));
+
+    expect(cambiarFiltros).toHaveBeenCalledWith({ disponibles: true });
   });
 
   it("después de postularse se confirma el resultado junto al botón", async () => {
