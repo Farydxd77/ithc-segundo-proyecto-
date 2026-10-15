@@ -18,12 +18,12 @@
 
 | Antes: antes de postularse | Antes: sin opción de cancelar | Después: cancelar postulación |
 |:-:|:-:|:-:|
-| ![Antes de postularse](evidencia/antes-1-antes-de-postularse.jpg) | ![Sin opción de cancelar](evidencia/antes-2-sin-opcion-de-cancelar.jpg) | ![Cancelar postulación](evidencia/despues-cancelar-postulacion.png) |
+| ![Antes de postularse](evidencias/antes-1-antes-de-postularse.jpg) | ![Sin opción de cancelar](evidencias/antes-2-sin-opcion-de-cancelar.jpg) | ![Cancelar postulación](evidencias/despues-cancelar-postulacion.png) |
 
 ### Hallazgo 2 · Convocatoria vencida marcada como abierta
 
-![Convocatoria vencida](evidencia/hallazgo-2-convocatoria-vencida.jpg)
+![Convocatoria vencida](evidencias/hallazgo-2-convocatoria-vencida.jpg)
 
 ### Hallazgo 3 · Botón y aviso innecesarios en la convocatoria propia
 
-![Convocatoria propia](evidencia/hallazgo-3-convocatoria-propia.png)
+![Convocatoria propia](evidencias/hallazgo-3-convocatoria-propia.png)
