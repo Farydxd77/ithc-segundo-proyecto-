@@ -50,6 +50,12 @@ export const esCreador = (anuncio: Anuncio, userId?: number) => anuncio.creadorI
 export const fechaLocal = (fecha: Date) =>
   `${fecha.getFullYear()}-${String(fecha.getMonth() + 1).padStart(2, "0")}-${String(fecha.getDate()).padStart(2, "0")}`;
 
+export type EstadoVisible = Estado | "vencida";
+
+// Una convocatoria abierta cuya fecha ya pasó se muestra como vencida, porque ya no admite postulaciones
+export const estadoVisible = (anuncio: Anuncio, hoy = new Date()): EstadoVisible =>
+  anuncio.estado === "abierta" && anuncio.fecha < fechaLocal(hoy) ? "vencida" : anuncio.estado;
+
 // Mismas reglas que el backend: devuelve el motivo por el que no se puede postular, o null si sí se puede.
 export const motivoBloqueoInscripcion = (anuncio: Anuncio, userId?: number, hoy = new Date()): string | null => {
   if (esCreador(anuncio, userId)) return "No puedes postularte a tu propia convocatoria";

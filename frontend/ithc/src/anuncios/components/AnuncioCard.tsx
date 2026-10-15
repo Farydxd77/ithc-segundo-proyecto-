@@ -2,7 +2,14 @@ import { useState } from "react";
 import { Link } from "react-router";
 import { useAuth } from "../../auth/context/AuthContext";
 import { useAnuncios } from "../context/AnunciosContext";
-import { CAUSAS, MODALIDADES, esCreador, motivoBloqueoInscripcion, type Anuncio } from "../../domain/convocatoria";
+import {
+  CAUSAS,
+  MODALIDADES,
+  esCreador,
+  estadoVisible,
+  motivoBloqueoInscripcion,
+  type Anuncio,
+} from "../../domain/convocatoria";
 
 interface AnuncioCardProps {
   anuncio: Anuncio;
@@ -13,14 +20,19 @@ export const AnuncioCard = ({ anuncio }: AnuncioCardProps) => {
   const { eliminar, cerrar, reabrir, inscribirse, cancelarPostulacion } = useAnuncios();
   const [confirmando, setConfirmando] = useState(false);
   const [error, setError] = useState("");
+  const [mensaje, setMensaje] = useState("");
 
   const esMio = esCreador(anuncio, user?.id);
   const bloqueo = motivoBloqueoInscripcion(anuncio, user?.id);
+  const estado = estadoVisible(anuncio);
 
-  const ejecutar = async (accion: () => Promise<void>) => {
+  // Si la acción sale bien se muestra el resultado junto al botón
+  const ejecutar = async (accion: () => Promise<void>, exito = "") => {
     setError("");
+    setMensaje("");
     try {
       await accion();
+      setMensaje(exito);
     } catch (err) {
       setError((err as Error).message);
     }
@@ -29,7 +41,7 @@ export const AnuncioCard = ({ anuncio }: AnuncioCardProps) => {
   return (
     <div className="anuncio">
       <p>
-        <strong>{anuncio.titulo}</strong> <span className={`estado ${anuncio.estado}`}>{anuncio.estado}</span>
+        <strong>{anuncio.titulo}</strong> <span className={`estado ${estado}`}>{estado}</span>
       </p>
       <p>{anuncio.descripcion}</p>
       <p className="detalle">
@@ -50,17 +62,32 @@ export const AnuncioCard = ({ anuncio }: AnuncioCardProps) => {
       {anuncio.inscrito ? (
         <div className="acciones">
           <p className="ok">✓ Estás inscrito</p>
-          <button className="secundario" onClick={() => ejecutar(() => cancelarPostulacion(anuncio.id))}>
+          <button
+            className="secundario"
+            onClick={() =>
+              ejecutar(() => cancelarPostulacion(anuncio.id), "Cancelaste tu postulación. El cupo quedó libre.")
+            }
+          >
             Cancelar postulación
           </button>
         </div>
       ) : (
         <>
-          <button disabled={!!bloqueo} onClick={() => ejecutar(() => inscribirse(anuncio.id))}>
+          <button
+            disabled={!!bloqueo}
+            onClick={() =>
+              ejecutar(() => inscribirse(anuncio.id), "Postulación enviada. Ya apareces entre los postulados.")
+            }
+          >
             Inscribirme
           </button>
           {bloqueo && <p className="aviso">{bloqueo}</p>}
         </>
+      )}
+      {mensaje && (
+        <p className="confirmacion" role="status">
+          {mensaje}
+        </p>
       )}
 
       {/* El creador ve la lista de postulados */}

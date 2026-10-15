@@ -80,6 +80,18 @@ textarea {
   background: #888;
 }
 
+.estado.vencida {
+  background: #b26a00;
+}
+
+.confirmacion {
+  color: #1e6b37;
+  background: #e6f4ea;
+  padding: 6px;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
 .acciones {
   display: flex;
   gap: 8px;

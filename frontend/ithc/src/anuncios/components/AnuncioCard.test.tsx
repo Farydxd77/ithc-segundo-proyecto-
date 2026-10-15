@@ -7,6 +7,7 @@ import type { Anuncio } from "../../domain/convocatoria";
 const cerrar = vi.fn();
 const reabrir = vi.fn();
 const cancelarPostulacion = vi.fn();
+const inscribirse = vi.fn();
 
 // El usuario con sesión iniciada es el creador del anuncio (id 7)
 vi.mock("../../auth/context/AuthContext", () => ({
@@ -14,7 +15,7 @@ vi.mock("../../auth/context/AuthContext", () => ({
 }));
 
 vi.mock("../context/AnunciosContext", () => ({
-  useAnuncios: () => ({ eliminar: vi.fn(), cerrar, reabrir, inscribirse: vi.fn(), cancelarPostulacion }),
+  useAnuncios: () => ({ eliminar: vi.fn(), cerrar, reabrir, inscribirse, cancelarPostulacion }),
 }));
 
 afterEach(cleanup);
@@ -115,5 +116,14 @@ describe("Postulación", () => {
     fireEvent.click(screen.getByText("Cancelar postulación"));
 
     await waitFor(() => expect(cancelarPostulacion).toHaveBeenCalledWith(1));
+  });
+
+  it("después de postularse se confirma el resultado junto al botón", async () => {
+    inscribirse.mockResolvedValue(undefined);
+    mostrar({ ...anuncio, creadorId: 8 });
+
+    fireEvent.click(screen.getByText("Inscribirme"));
+
+    expect(await screen.findByText("Postulación enviada. Ya apareces entre los postulados.")).toBeTruthy();
   });
 });

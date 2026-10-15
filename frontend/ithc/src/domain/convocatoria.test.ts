@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { esCreador, motivoBloqueoInscripcion, type Anuncio } from "./convocatoria";
+import { esCreador, estadoVisible, motivoBloqueoInscripcion, type Anuncio } from "./convocatoria";
 
 const anuncio: Anuncio = {
   id: 1,
@@ -53,6 +53,22 @@ describe("Inscripción a una convocatoria", () => {
 
   it("el creador no puede postularse a su propia convocatoria", () => {
     expect(motivoBloqueoInscripcion(anuncio, 7)).toBe("No puedes postularte a tu propia convocatoria");
+  });
+});
+
+describe("Estado que ve el usuario", () => {
+  const hoy = new Date(2026, 9, 15);
+
+  it("una convocatoria abierta con fecha pasada se muestra como vencida", () => {
+    expect(estadoVisible({ ...anuncio, fecha: "2026-10-03" }, hoy)).toBe("vencida");
+  });
+
+  it("una convocatoria abierta con fecha de hoy o futura sigue abierta", () => {
+    expect(estadoVisible({ ...anuncio, fecha: "2026-10-15" }, hoy)).toBe("abierta");
+  });
+
+  it("una convocatoria cerrada sigue cerrada aunque su fecha haya pasado", () => {
+    expect(estadoVisible({ ...anuncio, estado: "cerrada", fecha: "2026-10-03" }, hoy)).toBe("cerrada");
   });
 });
 
