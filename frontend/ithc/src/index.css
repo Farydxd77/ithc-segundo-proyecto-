@@ -84,6 +84,12 @@ textarea {
   background: #b26a00;
 }
 
+.ayuda {
+  margin: 0;
+  color: #666;
+  font-size: 12px;
+}
+
 .confirmacion {
   color: #1e6b37;
   background: #e6f4ea;

@@ -67,6 +67,10 @@ export const FiltrosConvocatorias = () => {
         />
         Solo abiertas y con cupos
       </label>
+      <p className="ayuda">
+        Muestra solo convocatorias abiertas, con fecha vigente y al menos un cupo libre: las únicas a las que puedes
+        postularte.
+      </p>
 
       {activos.length > 0 && (
         <div className="chips">

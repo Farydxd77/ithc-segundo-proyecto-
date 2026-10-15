@@ -19,6 +19,10 @@ export const Dashboard = () => {
       <Link to="/crear-anuncio">Crear anuncio</Link>
 
       <h3>Convocatorias</h3>
+      <p className="ayuda">
+        Elige una convocatoria y pulsa "Postularme". Puedes cancelar tu postulación mientras la actividad no se haya
+        realizado.
+      </p>
       <FiltrosConvocatorias />
 
       {cargando && <p>Cargando...</p>}
