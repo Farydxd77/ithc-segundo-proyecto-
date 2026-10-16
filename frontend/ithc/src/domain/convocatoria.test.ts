@@ -1,5 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { ESTADOS, esCreador, estadoVisible, fechaLegible, motivoBloqueoInscripcion, type Anuncio } from "./convocatoria";
+import {
+  ESTADOS,
+  esCreador,
+  estadoVisible,
+  fechaLegible,
+  motivoBloqueoInscripcion,
+  textoCupos,
+  type Anuncio,
+} from "./convocatoria";
 
 const anuncio: Anuncio = {
   id: 1,
@@ -81,6 +89,20 @@ describe("Fecha y estado en lenguaje del usuario", () => {
   it("el estado se muestra con su nombre y no con el valor técnico", () => {
     expect(ESTADOS.abierta).toBe("Abierta");
     expect(ESTADOS.vencida).toBe("Vencida");
+  });
+});
+
+describe("Cupos que quedan", () => {
+  it("dice cuántos cupos quedan sin que haya que restar", () => {
+    expect(textoCupos({ ...anuncio, cupos: 10, inscritos: 3 })).toBe("Quedan 7 de 10 cupos");
+  });
+
+  it("avisa cuando queda un solo cupo", () => {
+    expect(textoCupos({ ...anuncio, cupos: 5, inscritos: 4 })).toBe("Último cupo");
+  });
+
+  it("avisa cuando ya no quedan cupos", () => {
+    expect(textoCupos({ ...anuncio, cupos: 3, inscritos: 3 })).toBe("Sin cupos");
   });
 });
 

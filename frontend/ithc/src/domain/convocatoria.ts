@@ -74,6 +74,16 @@ export const fechaLegible = (fecha: string) => {
   return `${dia} de ${MESES[mes - 1]} de ${anio}`;
 };
 
+export const cuposLibres = (anuncio: Anuncio) => Math.max(anuncio.cupos - anuncio.inscritos, 0);
+
+// Los cupos que quedan dichos con palabras, para no tener que restar "4/5"
+export const textoCupos = (anuncio: Anuncio) => {
+  const quedan = cuposLibres(anuncio);
+  if (quedan === 0) return "Sin cupos";
+  if (quedan === 1) return "Último cupo";
+  return `Quedan ${quedan} de ${anuncio.cupos} cupos`;
+};
+
 // Mismas reglas que el backend: devuelve el motivo por el que no se puede postular, o null si sí se puede.
 export const motivoBloqueoInscripcion = (anuncio: Anuncio, userId?: number, hoy = new Date()): string | null => {
   if (esCreador(anuncio, userId)) return "No puedes postularte a tu propia convocatoria";

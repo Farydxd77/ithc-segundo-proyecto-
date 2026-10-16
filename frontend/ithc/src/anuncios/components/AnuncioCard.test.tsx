@@ -129,6 +129,13 @@ describe("Postulación", () => {
     expect(cambiarFiltros).toHaveBeenCalledWith({ disponibles: true });
   });
 
+  it("la tarjeta muestra los cupos que quedan en lugar de 4/5", () => {
+    mostrar({ ...anuncio, creadorId: 8, cupos: 5, inscritos: 4 });
+
+    expect(screen.getByText("Último cupo")).toBeTruthy();
+    expect(screen.queryByText(/4\/5/)).toBeNull();
+  });
+
   it("después de postularse se confirma el resultado junto al botón", async () => {
     inscribirse.mockResolvedValue(undefined);
     mostrar({ ...anuncio, creadorId: 8 });

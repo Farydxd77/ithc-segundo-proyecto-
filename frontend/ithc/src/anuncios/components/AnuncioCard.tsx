@@ -6,10 +6,12 @@ import {
   CAUSAS,
   ESTADOS,
   MODALIDADES,
+  cuposLibres,
   esCreador,
   fechaLegible,
   estadoVisible,
   motivoBloqueoInscripcion,
+  textoCupos,
   type Anuncio,
 } from "../../domain/convocatoria";
 
@@ -63,7 +65,8 @@ export const AnuncioCard = ({ anuncio }: AnuncioCardProps) => {
         </p>
       )}
       <p className="detalle">
-        {anuncio.inscritos}/{anuncio.cupos} postulados · publicado por {anuncio.creadorNombre}
+        <span className={cuposLibres(anuncio) <= 1 ? "cupos pocos" : "cupos"}>{textoCupos(anuncio)}</span> · publicado
+        por {anuncio.creadorNombre}
       </p>
 
       {/* Postulación: si está bloqueada se explica el motivo. Al creador no se le muestra porque nunca puede postularse */}

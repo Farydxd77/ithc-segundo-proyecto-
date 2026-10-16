@@ -8,7 +8,7 @@ Revisamos la lista de convocatorias, los filtros y la tarjeta de cada convocator
 |---|---|---|---|
 | Fitts | Quitar un filtro activo | El botón ✕ mide 23 x 18 px y solo esa parte se puede tocar | Documentado |
 | Hick | Panel de filtros | Seis controles aparecen a la vez antes de ver una sola convocatoria | Documentado |
-| Carga cognitiva | Cupos en la tarjeta | Hay que restar "4/5" para saber cuántos cupos quedan | Documentado |
+| Carga cognitiva | Cupos en la tarjeta | Hay que restar "4/5" para saber cuántos cupos quedan | Corregido |
 
 ## Fitts
 
@@ -43,3 +43,19 @@ Captura:
 ## Hallazgo elegido
 
 Elegimos carga cognitiva porque aparece en todas las tarjetas, justo cuando la persona decide si se postula. Fitts y Hick quedan documentados para corregir después.
+
+## Corrección
+
+Antes la tarjeta decía "4/5 postulados". Ahora dice directamente cuántos cupos quedan: "Quedan 3 de 5 cupos", "Último cupo" cuando queda uno y "Sin cupos" cuando se llenó. Cuando queda uno o ninguno el texto cambia de color, pero el significado está en las palabras y no depende del color.  
+Código: [convocatoria.ts](../frontend/ithc/src/domain/convocatoria.ts#L80) (textoCupos), [AnuncioCard.tsx](../frontend/ithc/src/anuncios/components/AnuncioCard.tsx#L68)  
+Pruebas: convocatoria.test.ts (cupos que quedan) y AnuncioCard.test.tsx (la tarjeta muestra los cupos que quedan en lugar de 4/5).  
+Comprobación: volvimos a abrir la lista con Daniel y en "Apoyo en vacunación comunitaria" ya se lee "Último cupo" sin tener que calcular.
+
+Antes:
+
+![](evidencias/clase-16/carga-antes.png)
+
+Después:
+
+![](evidencias/clase-16/carga-despues.png)
+![](evidencias/clase-16/carga-despues-quedan.png)
